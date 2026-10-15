@@ -1,0 +1,9 @@
+host,results_dir,threshold_tsc_ticks,predict_access_when,calibration_accuracy_pct,signal_accuracy_pct,signal_run_sd_pct,signal_trials_per_s,signal_correct_bits_per_s,signal_fpr_pct,signal_fnr_pct,mean_trial_us,unrelated_line_accuracy,no_victim_accuracy
+sunbird,results/sunbird,204,ticks <= threshold,100.000,98.13,5.90,2014320.9,1976653.1,0.00,3.74,0.496,"50.00% ± 0.00%","50.00% ± 0.00%"
+skylark,results/skylark,408,ticks > threshold,93.600,77.25,2.82,1626979.2,1256922.8,45.49,0.00,0.615,"50.13% ± 0.21%","50.03% ± 0.18%"
+artemisia,results/artemisia,248,ticks <= threshold,99.995,100.00,0.01,1169218.8,1169160.4,0.00,0.01,0.855,"50.00% ± 0.00%","50.00% ± 0.00%"
+charnwood,results/charnwood,134,ticks > threshold,99.970,99.55,0.63,3703126.6,3686388.4,0.53,0.38,0.270,"49.98% ± 0.05%","50.00% ± 0.01%"
+crux,results/crux,120,ticks > threshold,93.140,61.52,11.10,3446261.2,2120312.2,76.77,0.18,0.290,"49.93% ± 0.34%","50.06% ± 0.22%"
+ookay,results/ookay,150,ticks > threshold,99.570,92.99,3.96,3513269.3,3267164.8,14.01,0.00,0.285,"50.02% ± 0.09%","49.99% ± 0.13%"
+upgrade,results/upgrade,155,ticks > threshold,98.525,82.30,5.78,3318591.8,2731234.3,35.27,0.13,0.301,"50.18% ± 0.46%","50.05% ± 0.57%"
+charlotte,results/charlotte,424,ticks > threshold,87.185,50.01,0.01,3486914.0,1743666.2,0.03,99.96,0.287,"50.00% ± 0.01%","50.00% ± 0.01%"
