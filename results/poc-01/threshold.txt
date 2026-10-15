@@ -1,4 +1,0 @@
-threshold_tsc_ticks=384
-low_is_one=1
-calibration_per_class=10000
-calibration_accuracy=0.885800
