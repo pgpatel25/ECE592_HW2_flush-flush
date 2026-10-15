@@ -1,0 +1,6 @@
+CPU: 0; CLFLUSH line bytes: 64; shuffle seed: 14201880864552895698
+Suggested threshold: 151 TSC ticks
+Predict cached/bit 1 when ticks > threshold
+Calibration samples per class: 10000
+Calibration accuracy: 99.98% (not held-out accuracy)
+Timing matches ff_experiment.c; use its victim-matched calibration for results.
