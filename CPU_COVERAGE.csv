@@ -1,9 +1,0 @@
-host,status,evidence,notes
-Sunbird,measured,results/sunbird,Intel Xeon E5-2680 v3; attacker CPU 0 victim CPU 2; verification passed
-Charlotte,measured,results/charlotte,Replaces Thunderbird per user; Intel Core i7-6700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 50.006% (chance)
-Skylark,measured,results/checklist-skylark-20261015,AMD EPYC 7532; attacker CPU 0 victim CPU 1
-Artemisia,measured,results/artemisia,Intel Xeon Gold 5420+; attacker CPU 0 victim CPU 1; verification passed
-Charnwood,measured,results/charnwood,Intel Core i7-6700; attacker CPU 0 victim CPU 1; verification passed
-Crux,measured,results/crux,Intel Core i7-9700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 61.525% with run variation
-Ookay,measured,results/ookay,Intel Core i7-7700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 92.995%
-Upgrade,measured,results/upgrade,Intel Core i7-8700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 82.301%
