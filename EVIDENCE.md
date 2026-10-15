@@ -1,6 +1,6 @@
 # Flush+Flush evidence
 
-Six of seven checklist items have evidence for Skylark, Artemisia, Sunbird, Charnwood and Crux. Coverage of all eight assigned hosts is pending; portability is implemented, but portability does not establish measurements on unvisited hosts. See CPU_COVERAGE.csv.
+Six of seven checklist items have evidence for Skylark, Artemisia, Sunbird, Charnwood, Crux and Ookay. Coverage of all eight assigned hosts is pending; portability is implemented, but portability does not establish measurements on unvisited hosts. See CPU_COVERAGE.csv.
 
 ## Checklist and artifact map
 
@@ -12,7 +12,7 @@ Six of seven checklist items have evidence for Skylark, Artemisia, Sunbird, Char
 | Controls | Verified with limitation | no_victim and unrelated_line; unrelated line is on a different page, but cache-set relationship is not verified |
 | Additional measurements | Verified for Skylark | report.md and resources.csv: amortized trial latency, probe p50/p95, setup cost, mapping bytes and process peak RSS |
 | Reproducibility | Verified for Skylark | original/, sc/, tools/, raw CSVs, source/header/executable snapshots and SHA-256; verification.txt |
-| Assigned CPU coverage | Pending | CPU_COVERAGE.csv; three hosts still need local runs or actual unsupported/unavailable evidence |
+| Assigned CPU coverage | Pending | CPU_COVERAGE.csv; two hosts still need local runs or actual unsupported/unavailable evidence |
 
 Paths named without a directory in the table refer to results/checklist-skylark-20261015.
 
@@ -97,3 +97,13 @@ Standalone calibration selected 111 TSC ticks (high predicts access), with 99.98
 Held-out signal accuracy was 61.525% ± 11.10% run SD (38,475 errors/100,000); unrelated-line and no-victim controls achieved 49.926% and 50.059%. Signal run 1 achieved 93.12%, followed by 57.68–58.28% in runs 2–10. This calibration-to-test variation is retained without test-based retuning. Results do not establish reliable decoding on Crux. Synchronization, unverified cache-set independence and fixed-order drift remain limitations. Coverage is five of eight hosts; Thunderbird, Ookay and Upgrade remain pending.
 
 Reproduce with a fresh directory: bash tools/run_calibrated.sh 0 1 results/crux/NEW_RUN.
+
+## Ookay — 2026-10-15
+
+Completed the reference protocol on ookay.ece.ncsu.edu (Intel Core i7-7700), attacker CPU 0 and victim CPU 1, separate physical cores on socket 0. Calibration, raw trials, source/executable snapshots, metrics, verification, checklist and four PNG/PDF figure pairs are in results/ookay.
+
+The standalone calibration selected 150 TSC ticks (high predicts access), with 99.76% calibration accuracy. The experiment independently froze ticks > 150, with 99.57% calibration accuracy. The existing shared classifier fitted and applied Ookay's threshold and polarity before held-out collection; no algorithm change or reference-host constant was needed. Verification passed for 20,000 calibration and 300,000 held-out observations, snapshot hashes and resource measurements.
+
+Held-out signal accuracy was 92.995% ± 3.96% run SD (7,005 errors/100,000); unrelated-line and no-victim controls were approximately 50.02% and 49.99%. Signal runs ranged from 88.49% to 99.79%, without test-based retuning. Synchronization, unverified cache-set independence and fixed-order drift remain limitations. Coverage is six of eight hosts; Thunderbird and Upgrade remain pending.
+
+Reproduce with a fresh directory: PATH="$PWD/.venv/bin:$PATH" bash tools/run_calibrated.sh 0 1 results/ookay/NEW_RUN. Plotting package versions are preserved in results/ookay/python-requirements.txt.

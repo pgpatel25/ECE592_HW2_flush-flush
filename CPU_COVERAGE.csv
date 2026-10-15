@@ -5,5 +5,5 @@ Skylark,measured,results/checklist-skylark-20261015,AMD EPYC 7532; attacker CPU 
 Artemisia,measured,results/artemisia,Intel Xeon Gold 5420+; attacker CPU 0 victim CPU 1; verification passed
 Charnwood,measured,results/charnwood,Intel Core i7-6700; attacker CPU 0 victim CPU 1; verification passed
 Crux,measured,results/crux,Intel Core i7-9700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 61.525% with run variation
-Ookay,pending,,Use the actual DNS hostname when connecting; spelling not verified
+Ookay,measured,results/ookay,Intel Core i7-7700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 92.995%
 Upgrade,pending,,Run portable harness locally; no access failure claimed
