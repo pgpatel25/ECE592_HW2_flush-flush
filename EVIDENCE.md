@@ -1,6 +1,6 @@
 # Flush+Flush evidence
 
-Six of seven checklist items have evidence for Skylark, Artemisia and Sunbird. Coverage of all eight assigned hosts is pending; portability is implemented, but portability does not establish measurements on unvisited hosts. See CPU_COVERAGE.csv.
+Six of seven checklist items have evidence for Skylark, Artemisia, Sunbird and Charnwood. Coverage of all eight assigned hosts is pending; portability is implemented, but portability does not establish measurements on unvisited hosts. See CPU_COVERAGE.csv.
 
 ## Checklist and artifact map
 
@@ -12,7 +12,7 @@ Six of seven checklist items have evidence for Skylark, Artemisia and Sunbird. C
 | Controls | Verified with limitation | no_victim and unrelated_line; unrelated line is on a different page, but cache-set relationship is not verified |
 | Additional measurements | Verified for Skylark | report.md and resources.csv: amortized trial latency, probe p50/p95, setup cost, mapping bytes and process peak RSS |
 | Reproducibility | Verified for Skylark | original/, sc/, tools/, raw CSVs, source/header/executable snapshots and SHA-256; verification.txt |
-| Assigned CPU coverage | Pending | CPU_COVERAGE.csv; five hosts still need local runs or actual unsupported/unavailable evidence |
+| Assigned CPU coverage | Pending | CPU_COVERAGE.csv; four hosts still need local runs or actual unsupported/unavailable evidence |
 
 Paths named without a directory in the table refer to results/checklist-skylark-20261015.
 
@@ -79,3 +79,11 @@ The user's standalone calibration (524 ticks, low predicts 1) is preserved in ca
 Completed the same protocol on sunbird.ece.ncsu.edu (Intel Xeon E5-2680 v3), with attacker CPU 0 and victim CPU 2 on separate cores of socket 0. CPU 1 was excluded by inherited affinity. All raw observations, source/executable snapshots, calibration, metrics, verification and four PNG/PDF figure pairs are in results/sunbird; see checklist.md and report.md there.
 
 The standalone calibration selected 280 TSC ticks (low predicts access). The experiment independently froze ticks <= 204, with 100% calibration accuracy. Held-out signal accuracy was 98.13% ± 5.90% run SD; both controls were 50%. Signal run 1 achieved 81.33%, while the remaining nine achieved 99.99–100%; this variability is preserved without retuning. Verification passed for 20,000 calibration and 300,000 held-out observations. Coverage is now three of eight hosts; five remain pending. The existing limitations about synchronization, cache-set independence and fixed-order drift apply.
+
+## Charnwood — 2026-10-15
+
+Completed the same protocol on charnwood.ece.ncsu.edu (Intel Core i7-6700), attacker CPU 0 and victim CPU 1, separate physical cores on socket 0. Calibration, raw trials, source/executable snapshots, metrics, verification, checklist and four PNG/PDF figure pairs are in results/charnwood.
+
+The standalone calibration selected 156 TSC ticks (high predicts access), with 99.34% calibration accuracy. The experiment independently froze ticks > 134, with 99.97% calibration accuracy. The existing classifier automatically adjusted threshold and polarity before tests; no reference-host constants were reused. Held-out signal accuracy was 99.55% ± 0.63% run SD (452 errors/100,000); unrelated-line and no-victim controls achieved 49.98% and 50.00%. Verification passed for 20,000 calibration and 300,000 held-out observations. Coverage is four of eight hosts, with four pending. Synchronization, unverified cache-set independence and fixed-order drift remain limitations.
+
+Reproduce with a fresh output directory: bash tools/run_calibrated.sh 0 1 results/charnwood/NEW_RUN.

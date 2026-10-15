@@ -55,7 +55,7 @@ Conditions run in fixed order. This initial harness does not eliminate drift or 
 
 CLFLUSH requires shared memory, which is constructed explicitly here. Eviction sets are not applicable to this Flush+Flush implementation. This does **not** validate eviction-based techniques. Other primitives are not implemented; unavailable CPUs and unsupported instruction executions must be reported as such, not replaced with another technique. Run separately on each authorized CPU pair and preserve failed runs and their error/status files. A partial run is not a completed dataset. CPU support flags alone cannot guarantee OS/hypervisor permission; execution failures are retained by the runner.
 
-Measurements and checked artifact maps are available in EVIDENCE.md, results/checklist-skylark-20261015, results/artemisia, and results/sunbird. The portable tools/run_local.sh wrapper supports collection on other Linux x86-64 hosts. Use CPUs permitted by your allocation; five other hosts are still pending.
+Measurements and checked artifact maps are available in EVIDENCE.md, results/checklist-skylark-20261015, results/artemisia, results/sunbird, and results/charnwood. The portable tools/run_local.sh wrapper supports collection on other Linux x86-64 hosts. Use CPUs permitted by your allocation; four other hosts are still pending.
 
 Timing reference: Intel's instruction reference documents RDTSCP ordering and use of MFENCE/LFENCE: https://cdrdv2-public.intel.com/774492/325383-sdm-vol-2abcd.pdf . The chosen observable includes MFENCE completion cost, so it must be calibrated independently from the original benchmark.
 
@@ -85,3 +85,5 @@ An empirical information estimate can be positive from finite-sample noise. Repo
 ## Complete calibration and figure workflow
 
 Run `bash tools/run_calibrated.sh ATTACKER_CPU VICTIM_CPU NEW_OUTPUT_DIRECTORY` to collect the independently calibrated experiment, standalone benchmark, verification and PNG/PDF figures together. Python NumPy and Matplotlib are required for figures. The classifier recalibrates threshold and polarity on every invocation before held-out collection; standalone benchmark thresholds are diagnostic only. On Sunbird, use permitted same-socket CPUs 0 and 2 (CPU 1 is excluded by inherited affinity). Completed Sunbird artifacts and checklist are in results/sunbird. Use a fresh directory for subsequent runs.
+
+Charnwood (Intel Core i7-6700) uses permitted separate-core, same-socket CPUs 0 and 1. Its completed results and checklist are in results/charnwood. The experiment fitted ticks > 134 as access (99.97% calibration accuracy); the standalone diagnostic fitted ticks > 156. The shared code automatically selects this reversed polarity. Reproduce with bash tools/run_calibrated.sh 0 1 results/charnwood/NEW_RUN using a fresh directory.
