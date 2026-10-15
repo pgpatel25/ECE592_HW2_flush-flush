@@ -1,0 +1,1 @@
+pid 1277094's current affinity list: 0-27,56-83

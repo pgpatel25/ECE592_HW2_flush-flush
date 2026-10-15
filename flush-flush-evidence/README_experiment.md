@@ -10,8 +10,8 @@ To compile both programs and run the simple calibration on an authorized CPU:
 
 ```bash
 cd /home/pgpatel/ECE592_HW2_flush-flush
-cc -std=c11 -O2 -Wall -Wextra sc/ff_bench.c -o sc/ff_bench
-cc -std=c11 -O2 -Wall -Wextra sc/ff_experiment.c -o sc/ff_experiment
+cc -std=c11 -O0 -Wall -Wextra sc/ff_bench.c -o sc/ff_bench
+cc -std=c11 -O0 -Wall -Wextra sc/ff_experiment.c -o sc/ff_experiment
 mkdir results/bench-local-01
 cd results/bench-local-01
 taskset -c 0 ../../sc/ff_bench | tee calibration.txt

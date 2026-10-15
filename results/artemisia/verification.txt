@@ -1,0 +1,8 @@
+PASS: 20,000 calibration observations (10,000/class).
+PASS: minimum-error calibration rule; freeze precedes test collection in snapshot source.
+Frozen rule: predict access when ticks <= 248.
+PASS: 300,000 test observations; 10 runs/condition; 5,000 labels/class/run.
+PASS: all predictions and confusion counts match the frozen rule and raw data.
+PASS: source/header/executable SHA-256 and positive resource measurements.
+LIMIT: stored data cannot prove collection freshness independently; source and recorded seed document the protocol.
+LIMIT: cache-set independence and multi-host coverage require separate evidence.
