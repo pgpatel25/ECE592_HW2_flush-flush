@@ -1,0 +1,2 @@
+attacker_cpu=0
+victim_cpu=2

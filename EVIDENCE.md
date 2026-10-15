@@ -1,6 +1,6 @@
 # Flush+Flush evidence
 
-Six of seven checklist items have evidence for Skylark and Artemisia. Coverage of all eight assigned hosts is pending; portability is implemented, but portability does not establish measurements on unvisited hosts. See CPU_COVERAGE.csv.
+Six of seven checklist items have evidence for Skylark, Artemisia and Sunbird. Coverage of all eight assigned hosts is pending; portability is implemented, but portability does not establish measurements on unvisited hosts. See CPU_COVERAGE.csv.
 
 ## Checklist and artifact map
 
@@ -12,7 +12,7 @@ Six of seven checklist items have evidence for Skylark and Artemisia. Coverage o
 | Controls | Verified with limitation | no_victim and unrelated_line; unrelated line is on a different page, but cache-set relationship is not verified |
 | Additional measurements | Verified for Skylark | report.md and resources.csv: amortized trial latency, probe p50/p95, setup cost, mapping bytes and process peak RSS |
 | Reproducibility | Verified for Skylark | original/, sc/, tools/, raw CSVs, source/header/executable snapshots and SHA-256; verification.txt |
-| Assigned CPU coverage | Pending | CPU_COVERAGE.csv; six hosts still need local runs or actual unsupported/unavailable evidence |
+| Assigned CPU coverage | Pending | CPU_COVERAGE.csv; five hosts still need local runs or actual unsupported/unavailable evidence |
 
 Paths named without a directory in the table refer to results/checklist-skylark-20261015.
 
@@ -73,3 +73,9 @@ Preserve failed directories, stderr and exit status. An unsupported result needs
 Completed the same protocol as Skylark on artemisia.ece.ncsu.edu (Intel Xeon Gold 5420+), attacker CPU 0 and victim CPU 1, separate physical cores on socket 0. All artifacts and four figures in PNG/PDF are in results/artemisia. See results/artemisia/checklist.md, report.md, and verification.txt.
 
 The user's standalone calibration (524 ticks, low predicts 1) is preserved in calibration.txt and bench_calibration.csv. The experiment independently froze ticks <= 248 as bit 1, with 99.995% calibration accuracy. Across 10 fresh runs per condition, signal held-out accuracy was 99.995% (5 errors in 100,000 trials); both controls were exactly 50%. This supports a controlled synchronized signal on this host. The different-line control's cache-set relationship remains unverified. Overall coverage is two of eight hosts, with six pending.
+
+## Sunbird — 2026-10-15
+
+Completed the same protocol on sunbird.ece.ncsu.edu (Intel Xeon E5-2680 v3), with attacker CPU 0 and victim CPU 2 on separate cores of socket 0. CPU 1 was excluded by inherited affinity. All raw observations, source/executable snapshots, calibration, metrics, verification and four PNG/PDF figure pairs are in results/sunbird; see checklist.md and report.md there.
+
+The standalone calibration selected 280 TSC ticks (low predicts access). The experiment independently froze ticks <= 204, with 100% calibration accuracy. Held-out signal accuracy was 98.13% ± 5.90% run SD; both controls were 50%. Signal run 1 achieved 81.33%, while the remaining nine achieved 99.99–100%; this variability is preserved without retuning. Verification passed for 20,000 calibration and 300,000 held-out observations. Coverage is now three of eight hosts; five remain pending. The existing limitations about synchronization, cache-set independence and fixed-order drift apply.

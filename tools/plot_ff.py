@@ -65,7 +65,7 @@ def main():
     output_dir = root / 'figures'
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    fig, ax = plt.subplots(figsize=(8.2, 4.8), layout='constrained')
+    fig, ax = plt.subplots(figsize=(8.2, 4.8), constrained_layout=True)
     jitter = np.linspace(-0.17, 0.17, 10)
     for index, (mode, label, color) in enumerate(zip(MODES, LABELS, COLORS)):
         runs = sorted((row for row in summary if row['mode'] == mode),
@@ -79,7 +79,8 @@ def main():
                     label=f'{label} mean +/- 1 SD')
     ax.axhline(50, color='#555555', linestyle='--', linewidth=1.2,
                label='Balanced-guess chance (50%)')
-    ax.set_xticks(range(len(LABELS)), LABELS)
+    ax.set_xticks(range(len(LABELS)))
+    ax.set_xticklabels(LABELS)
     ax.set_ylim(40, 100)
     ax.set_ylabel('Held-out accuracy (%)')
     ax.set_title('Flush+Flush classification accuracy across runs')
@@ -99,7 +100,7 @@ def main():
 
     x = np.arange(len(MODES))
     width = 0.34
-    fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.6), layout='constrained')
+    fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.6), constrained_layout=True)
     for offset, metric, label, color in (
             (-width / 2, 'fpr', 'False-positive rate', '#D55E00'),
             (width / 2, 'fnr', 'False-negative rate', '#0072B2')):
@@ -110,7 +111,8 @@ def main():
             numerator = counts['fp'] if metric == 'fpr' else counts['fn']
             rates.append(100 * numerator / denominator)
         axes[0].bar(x + offset, rates, width, label=label, color=color)
-    axes[0].set_xticks(x, LABELS)
+    axes[0].set_xticks(x)
+    axes[0].set_xticklabels(LABELS)
     axes[0].set_ylim(0, 100)
     axes[0].set_ylabel('Rate (%)')
     axes[0].set_title('Classifier errors')
@@ -122,7 +124,8 @@ def main():
     correct_rates = [totals[mode]['correct'] / totals[mode]['seconds'] / 1e6 for mode in MODES]
     axes[1].bar(x - width / 2, trial_rates, width, label='Trials/s', color='#009E73')
     axes[1].bar(x + width / 2, correct_rates, width, label='Correct decisions/s', color='#E69F00')
-    axes[1].set_xticks(x, LABELS)
+    axes[1].set_xticks(x)
+    axes[1].set_xticklabels(LABELS)
     axes[1].set_ylabel('Millions per second')
     axes[1].set_title('Observed rates')
     axes[1].legend(frameon=False, fontsize=8)
@@ -137,7 +140,7 @@ def main():
     all_ticks = np.concatenate([np.asarray(values) for values in trials.values()])
     low, high = np.percentile(all_ticks, [0.5, 99.5])
     bins = np.linspace(low, high, 45)
-    fig, axes = plt.subplots(1, 3, figsize=(12.2, 4.2), sharey=True, layout='constrained')
+    fig, axes = plt.subplots(1, 3, figsize=(12.2, 4.2), sharey=True, constrained_layout=True)
     for ax, mode, label in zip(axes, MODES, LABELS):
         for bit, color in enumerate(BIT_COLORS):
             ax.hist(trials[(mode, bit)], bins=bins, density=True, histtype='step',
@@ -159,7 +162,7 @@ def main():
         resource_rows = read_rows(resource_path)
         if resource_rows:
             resource = resource_rows[0]
-            fig, axes = plt.subplots(1, 2, figsize=(8.6, 4.2), layout='constrained')
+            fig, axes = plt.subplots(1, 2, figsize=(8.6, 4.2), constrained_layout=True)
             axes[0].bar(('Setup', 'Calibration'),
                         (float(resource['setup_seconds']),
                          float(resource['calibration_collection_seconds'])),

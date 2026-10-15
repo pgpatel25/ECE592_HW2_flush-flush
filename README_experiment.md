@@ -55,7 +55,7 @@ Conditions run in fixed order. This initial harness does not eliminate drift or 
 
 CLFLUSH requires shared memory, which is constructed explicitly here. Eviction sets are not applicable to this Flush+Flush implementation. This does **not** validate eviction-based techniques. Other primitives are not implemented; unavailable CPUs and unsupported instruction executions must be reported as such, not replaced with another technique. Run separately on each authorized CPU pair and preserve failed runs and their error/status files. A partial run is not a completed dataset. CPU support flags alone cannot guarantee OS/hypervisor permission; execution failures are retained by the runner.
 
-Measurements and checked artifact maps are available in EVIDENCE.md, results/checklist-skylark-20261015, and results/artemisia. The portable tools/run_local.sh wrapper supports collection on other Linux x86-64 hosts. Use CPUs permitted by your allocation; six other hosts are still pending.
+Measurements and checked artifact maps are available in EVIDENCE.md, results/checklist-skylark-20261015, results/artemisia, and results/sunbird. The portable tools/run_local.sh wrapper supports collection on other Linux x86-64 hosts. Use CPUs permitted by your allocation; five other hosts are still pending.
 
 Timing reference: Intel's instruction reference documents RDTSCP ordering and use of MFENCE/LFENCE: https://cdrdv2-public.intel.com/774492/325383-sdm-vol-2abcd.pdf . The chosen observable includes MFENCE completion cost, so it must be calibrated independently from the original benchmark.
 
@@ -81,3 +81,7 @@ The runner's `report.md` now includes the following, calculated from fresh held-
 Mean trial latency is an amortized batch measurement. It is not a p95 end-to-end latency; only probe TSC durations have percentiles. Setup time is one observation per program invocation; repeat full experiments if setup variance is required. Setup includes calibration CSV output, while calibration collection time excludes its output. Throughput batches exclude prediction/counting and CSV output, so rates describe probe collection, not full decoding or application throughput.
 
 An empirical information estimate can be positive from finite-sample noise. Report controls and repeated-run accuracy alongside it; a chance-level PoC does not demonstrate leakage even if the correct-bits/s number looks large. This is a synthetic, explicitly synchronized known-bit PoC, not evidence of extracting unknown application secrets.
+
+## Complete calibration and figure workflow
+
+Run `bash tools/run_calibrated.sh ATTACKER_CPU VICTIM_CPU NEW_OUTPUT_DIRECTORY` to collect the independently calibrated experiment, standalone benchmark, verification and PNG/PDF figures together. Python NumPy and Matplotlib are required for figures. The classifier recalibrates threshold and polarity on every invocation before held-out collection; standalone benchmark thresholds are diagnostic only. On Sunbird, use permitted same-socket CPUs 0 and 2 (CPU 1 is excluded by inherited affinity). Completed Sunbird artifacts and checklist are in results/sunbird. Use a fresh directory for subsequent runs.
