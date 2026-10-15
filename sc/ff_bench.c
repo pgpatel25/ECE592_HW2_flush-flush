@@ -1,118 +1,68 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
+#define _GNU_SOURCE
+#include <inttypes.h>
 #include <sched.h>
-#include <x86intrin.h>
+#include <string.h>
+#include "ff_common.h"
 
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
+/* Simple single-process calibration, based on the supplied calibration code.
+   Run pinned to an authorized CPU, e.g. taskset -c 0 ./ff_bench.
+   The experiment recalibrates with its own victim placement. */
+static unsigned char array[5 * 4096] __attribute__((aligned(4096)));
 
-#define SampleSize 1000000
-#define Hist_bins 600
-
-static size_t array[5 *1024];
-
-static size_t hit_hist[Hist_bins];
-static size_t miss_hist[Hist_bins];
-
-static inline uint64_t rdtsc_serial(void) {
-    _mm_lfence();
-    uint64_t r = __rdtsc();
-    _mm_lfence();
-    return r;
+static uint64_t flush_hit_time(void *target) {
+    flush(target);
+    maccess(target);                 /* known cached class */
+    return flushandreload(target);
 }
-
-static inline void flush(void *p) {
-    _mm_clflush(p);
-}
-
-static inline uint64_t rdtsc_start(void) {
-    unsigned int aux;
-    uint64_t r = __rdtscp(&aux);
-    _mm_lfence();
-    return r;
-}
-
-static inline uint64_t rdtsc_end(void) {
-    _mm_lfence();
-    unsigned int aux;
-    return __rdtscp(&aux);
-}
-
-static inline void maccess(void *p) {
-    (void)*(volatile uint8_t *)p;
-}
-
-static inline uint64_t measure_access_time(void *p) {
-    uint64_t start = rdtsc_serial();
-    maccess(p);
-    return rdtsc_serial() - start;
-}
-
-
-static size_t flush_hit_time(void *p) {
-    maccess(p);
-    uint64_t start = rdtsc_start();
-    flush(p);
-    uint64_t end = rdtsc_end();
-    return end - start;
-}
-
-static size_t flush_miss_time(void *p) {
-    flush(p);
-    uint64_t start = rdtsc_start();
-    flush(p);
-    uint64_t end = rdtsc_end();
-    return end - start;
+static uint64_t flush_miss_time(void *target) {
+    flush(target);                   /* known uncached class */
+    return flushandreload(target);
 }
 
 int main(void) {
-    memset(array, -1, sizeof(array));
-    void *target = &array[2 * 1024];
-    maccess(target);
-    sched_yield();
-
-    for(int i = 0; i < SampleSize; i++) {
-        size_t hit_time = flush_hit_time(target);
-        hit_hist[MIN(Hist_bins - 1, hit_time)]++;
+    cpu_set_t mask;
+    if (sched_getaffinity(0, sizeof(mask), &mask)) {
+        perror("sched_getaffinity"); return 1;
     }
-
-    for(int i = 0; i < SampleSize; i++) {
-        size_t miss_time = flush_miss_time(target);
-        miss_hist[MIN(Hist_bins - 1, miss_time)]++;
+    if (CPU_COUNT(&mask) != 1) {
+        fputs("Pin calibration to one authorized CPU with taskset -c CPU\n", stderr);
+        return 2;
     }
-
-    size_t hit_max = 0;
-    size_t hit_max_i = 0;
-    size_t miss_max_i = 0;
-    size_t miss_max = 0;
-
-    for(int i = 0; i < Hist_bins; i++) {
-       printf("%d %zu %zu\n", i, hit_hist[i], miss_hist[i]);
-        if(hit_hist[i] > hit_max) {
-            hit_max = hit_hist[i];
-            hit_max_i = i;
-        }
-        if(miss_hist[i] > miss_max) {
-            miss_max = miss_hist[i];
-            miss_max_i = i;
-        }
+    unsigned line = check_cpu();
+    memset(array, 1, sizeof(array));
+    void *target = array + 2 * 4096;
+    int bits[2 * CALIBRATION_PER_CLASS];
+    struct sample samples[2 * CALIBRATION_PER_CLASS];
+    uint64_t seed;
+    FILE *random = fopen("/dev/urandom", "rb");
+    if (!random || fread(&seed, sizeof(seed), 1, random) != 1) {
+        fputs("Cannot obtain shuffle seed\n", stderr); return 1;
     }
-    
-    size_t min = (size_t)-1;
-    size_t threshold = 0;
-    int lo = hit_max_i < miss_max_i ? hit_max_i : miss_max_i;
-    int hi = hit_max_i > miss_max_i ? hit_max_i : miss_max_i;
-    for(int i = lo; i <= hi; i++){
-        size_t combined = hit_hist[i] + miss_hist[i];
-        if(combined < min){
-            min = combined;
-            threshold = i;
-        }
+    fclose(random);
+    if (!seed) seed = 1;
+    printf("CPU: %d; CLFLUSH line bytes: %u; shuffle seed: %" PRIu64 "\n",
+           sched_getcpu(), line, seed);
+    for (int i = 0; i < 1000; i++) {
+        if (i & 1) (void)flush_hit_time(target);
+        else (void)flush_miss_time(target);
     }
-
-    printf("Suggested threshold: %zu cycles\n", threshold);
-    printf("hit_max_i = %zu, hit_max = %zu\n", hit_max_i, hit_max);
-    printf("miss_max_i = %zu, miss_max = %zu\n", miss_max_i, miss_max); 
-    printf("lo=%d hi=%d\n", lo, hi);
+    balanced_labels(bits, 2 * CALIBRATION_PER_CLASS, &seed);
+    FILE *raw = fopen("bench_calibration.csv", "wx");
+    if (!raw) { perror("bench_calibration.csv (use a fresh output directory)"); return 1; }
+    fputs("trial,bit,tsc_ticks\n", raw);
+    for (int i = 0; i < 2 * CALIBRATION_PER_CLASS; i++) {
+        uint64_t ticks = bits[i] ? flush_hit_time(target) : flush_miss_time(target);
+        samples[i] = (struct sample){ticks, bits[i]};
+    }
+    for (int i = 0; i < 2 * CALIBRATION_PER_CLASS; i++)
+        fprintf(raw, "%d,%d,%" PRIu64 "\n", i, bits[i], samples[i].ticks);
+    if (fclose(raw)) { perror("write calibration"); return 1; }
+    struct classifier rule = calibrate(samples, 2 * CALIBRATION_PER_CLASS);
+    printf("Suggested threshold: %" PRIu64 " TSC ticks\n", rule.threshold);
+    printf("Predict cached/bit 1 when ticks %s threshold\n", rule.low_is_one ? "<=" : ">");
+    printf("Calibration samples per class: %d\n", CALIBRATION_PER_CLASS);
+    printf("Calibration accuracy: %.2f%% (not held-out accuracy)\n",
+           100.0 * (1.0 - rule.errors / (2.0 * CALIBRATION_PER_CLASS)));
+    puts("Timing matches ff_experiment.c; use its victim-matched calibration for results.");
     return 0;
 }

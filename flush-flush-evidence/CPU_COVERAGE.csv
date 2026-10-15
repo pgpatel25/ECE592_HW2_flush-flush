@@ -1,0 +1,9 @@
+host,status,evidence,notes
+Sunbird,pending,,Run portable harness locally; no access failure claimed
+Thunderbird,pending,,Run portable harness locally; no access failure claimed
+Skylark,measured,results/checklist-skylark-20261015,AMD EPYC 7532; attacker CPU 0 victim CPU 1
+Artemisia,pending,,Run portable harness locally; no access failure claimed
+Charnwood,pending,,Run portable harness locally; no access failure claimed
+Crux,pending,,Run portable harness locally; no access failure claimed
+Ookay,pending,,Use the actual DNS hostname when connecting; spelling not verified
+Upgrade,pending,,Run portable harness locally; no access failure claimed
