@@ -1,0 +1,14 @@
+Charlotte collection environment, 2026-10-15
+System packages were unchanged. Native cc and binutils were absent.
+Ubuntu packages were downloaded with apt-get download and extracted using dpkg-deb -x into /tmp/charlotte-build-tools/root.
+Packages: gcc-13 gcc-13-x86-64-linux-gnu cpp-13 cpp-13-x86-64-linux-gnu libgcc-13-dev binutils binutils-x86-64-linux-gnu binutils-common libbinutils libctf0 libctf-nobfd0 libgprofng0 libsframe1
+/tmp/charlotte-build-tools/bin/cc is a symlink to /tmp/charlotte-build-tools/root/usr/bin/gcc-13.
+Python environment: python3 -m venv .venv; .venv/bin/python -m pip install numpy matplotlib
+Exact Python package versions: python-requirements.txt
+Exact compiler version: compiler.txt
+Exact Ubuntu package versions: build-packages.txt
+
+Collection command (repository root):
+PATH="/tmp/charlotte-build-tools/bin:/tmp/charlotte-build-tools/root/usr/bin:$PWD/.venv/bin:$PATH" LD_LIBRARY_PATH="/tmp/charlotte-build-tools/root/usr/lib/x86_64-linux-gnu" bash tools/run_calibrated.sh 0 1 results/charlotte
+
+For future runs, recreate the local tools if /tmp has been cleared, or use an installed native compiler/binutils. Use a NEW output directory. Source and executable snapshots from this run are preserved here.

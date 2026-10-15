@@ -1,6 +1,6 @@
 host,status,evidence,notes
 Sunbird,measured,results/sunbird,Intel Xeon E5-2680 v3; attacker CPU 0 victim CPU 2; verification passed
-Thunderbird,pending,,Run portable harness locally; no access failure claimed
+Charlotte,measured,results/charlotte,Replaces Thunderbird per user; Intel Core i7-6700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 50.006% (chance)
 Skylark,measured,results/checklist-skylark-20261015,AMD EPYC 7532; attacker CPU 0 victim CPU 1
 Artemisia,measured,results/artemisia,Intel Xeon Gold 5420+; attacker CPU 0 victim CPU 1; verification passed
 Charnwood,measured,results/charnwood,Intel Core i7-6700; attacker CPU 0 victim CPU 1; verification passed

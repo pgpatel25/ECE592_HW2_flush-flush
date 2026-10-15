@@ -1,6 +1,6 @@
 # Flush+Flush evidence
 
-Six of seven checklist items have evidence for Skylark, Artemisia, Sunbird, Charnwood, Crux, Ookay and Upgrade. Coverage of all eight assigned hosts is pending; portability is implemented, but portability does not establish measurements on unvisited hosts. See CPU_COVERAGE.csv.
+All seven checklist items now have evidence across Skylark, Artemisia, Sunbird, Charnwood, Crux, Ookay, Upgrade and Charlotte. Charlotte replaces Thunderbird per the user’s updated assignment. All eight assigned hosts are measured; see CPU_COVERAGE.csv. Measurement completion does not imply reliable decoding on every host. Historical coverage counts below describe the state at each earlier run.
 
 ## Checklist and artifact map
 
@@ -12,7 +12,7 @@ Six of seven checklist items have evidence for Skylark, Artemisia, Sunbird, Char
 | Controls | Verified with limitation | no_victim and unrelated_line; unrelated line is on a different page, but cache-set relationship is not verified |
 | Additional measurements | Verified for Skylark | report.md and resources.csv: amortized trial latency, probe p50/p95, setup cost, mapping bytes and process peak RSS |
 | Reproducibility | Verified for Skylark | original/, sc/, tools/, raw CSVs, source/header/executable snapshots and SHA-256; verification.txt |
-| Assigned CPU coverage | Pending | CPU_COVERAGE.csv; Thunderbird still needs a local run or actual unsupported/unavailable evidence |
+| Assigned CPU coverage | Complete | CPU_COVERAGE.csv; Charlotte replaces Thunderbird; all eight hosts measured; results/charlotte/checklist.md |
 
 Paths named without a directory in the table refer to results/checklist-skylark-20261015.
 
@@ -117,3 +117,13 @@ Standalone calibration selected 151 TSC ticks (high predicts access), with 99.98
 Signal accuracy was 82.301% ± 5.78% run SD, ranging from 78.95% to 97.08%; controls remained near 50%. Calibration-to-test variation is preserved without retuning. Synchronization, fixed-order drift and unverified cache-set independence remain limitations. Coverage is seven of eight hosts; Thunderbird remains pending.
 
 Reproduce in a fresh directory: PATH="$PWD/.venv/bin:$PATH" bash tools/run_calibrated.sh 0 1 results/upgrade/NEW_RUN. Plotting dependencies are recorded in results/upgrade/python-requirements.txt.
+
+## Charlotte — 2026-10-15
+
+Charlotte replaces Thunderbird per the user’s updated assignment. Completed the reference protocol on charlotte.ece.ncsu.edu (Intel Core i7-6700), attacker CPU 0 and victim CPU 1 on separate physical cores of socket 0; inherited affinity permits CPUs 0–7. All calibration, raw trials, metrics, source/executable and tool snapshots, verification, checklist and four PNG/PDF figure pairs are in results/charlotte.
+
+Fresh victim-matched calibration froze ticks > 424 as access, with 87.185% calibration accuracy. The independent standalone diagnostic selected ticks > 214 (87.50%). The existing shared code fitted and applied Charlotte’s threshold and polarity before tests; no algorithm edit or copied host constant was needed. Verification passed for 20,000 calibration observations and 300,000 held-out observations, predictions, confusion counts, snapshot hashes and resources.
+
+Held-out signal accuracy was 50.006% (49,994 errors/100,000); unrelated_line was 49.997% and no_victim 50.002%. Calibration did not transfer to held-out timings. These results do not demonstrate reliable decoding or leakage on Charlotte. The frozen rule is retained without test-based retuning. Fixed-order drift, synchronized known-bit inputs and unverified cache-set independence remain limitations. Overall assigned-host coverage is now eight of eight, with Charlotte substituted for Thunderbird.
+
+The machine lacked a native compiler, binutils and plotting packages. Local extracted Ubuntu compiler/binutils packages and a repository .venv enabled the unchanged collection workflow; see results/charlotte/build_environment.txt and python-requirements.txt.
