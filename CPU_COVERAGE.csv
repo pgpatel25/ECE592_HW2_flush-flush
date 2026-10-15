@@ -4,6 +4,6 @@ Thunderbird,pending,,Run portable harness locally; no access failure claimed
 Skylark,measured,results/checklist-skylark-20261015,AMD EPYC 7532; attacker CPU 0 victim CPU 1
 Artemisia,measured,results/artemisia,Intel Xeon Gold 5420+; attacker CPU 0 victim CPU 1; verification passed
 Charnwood,measured,results/charnwood,Intel Core i7-6700; attacker CPU 0 victim CPU 1; verification passed
-Crux,pending,,Run portable harness locally; no access failure claimed
+Crux,measured,results/crux,Intel Core i7-9700; attacker CPU 0 victim CPU 1; verification passed; signal accuracy 61.525% with run variation
 Ookay,pending,,Use the actual DNS hostname when connecting; spelling not verified
 Upgrade,pending,,Run portable harness locally; no access failure claimed
